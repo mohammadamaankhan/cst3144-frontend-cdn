@@ -30,6 +30,12 @@ As per course requirements, this implementation uses Vue 2 loaded directly via C
 
 The frontend connects to my backend API hosted on Render.com: https://cst3144-backend-f7yf.onrender.com
 
+**Note**: After first push, enable GitHub Pages in repo settings:
+1. Go to Settings → Pages
+2. Source: Deploy from branch
+3. Branch: main → / (root)
+4. Save
+
 ## Features
 
 All features implemented in a single `index.html` file:

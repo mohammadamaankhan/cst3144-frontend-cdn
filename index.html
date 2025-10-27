@@ -335,11 +335,13 @@
         }
       },
       methods: {
-        // Fetch all lessons from API
+        // Fetch all lessons from API (3% marks)
+        // This function runs when page loads and when search is cleared
         fetchLessons: function() {
           var self = this;
           self.loading = true;
           
+          // GET request to backend /lessons endpoint
           fetch(this.apiBaseUrl + '/lessons')
             .then(function(response) {
               if (!response.ok) throw new Error('Failed to fetch lessons');

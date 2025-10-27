@@ -292,9 +292,11 @@
         };
       },
       computed: {
-        // Sorted and filtered lessons
+        // Sorted and filtered lessons (10% marks - sort functionality)
+        // This computed property automatically recalculates when lessons, sortBy, or sortOrder changes
         displayedLessons: function() {
           var self = this;
+          // Create copy of lessons array before sorting (don't mutate original)
           var sorted = this.lessons.slice().sort(function(a, b) {
             var aValue = a[self.sortBy];
             var bValue = b[self.sortBy];

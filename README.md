@@ -124,7 +124,7 @@ This single HTML file is deployed to GitHub Pages. No build process required - j
 
 ## Source Code
 
-**GitHub Repository**: [To be created]
+**GitHub Repository**: https://github.com/mohammadamaankhan/cst3144-frontend-cdn
 
 ## How It Works
 

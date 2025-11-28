@@ -3,42 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Page Title & SEO -->
   <title>After-School Lessons</title>
-  <meta name="description" content="CST3144 After-School Lessons app built with Vue 2 (CDN). Browse, search, sort and book lessons with a simple cart and checkout.">
+  <meta name="description" content="Browse and book after-school classes for your children">
   <meta name="theme-color" content="#1e3a5f">
   <link rel="icon" href="https://fav.farm/🎓" />
   
-  <!-- Geist Font -->
+  <!-- ============================================
+       EXTERNAL LIBRARIES (CDN)
+       ============================================ -->
+  
+  <!-- Geist Font - Clean, modern typeface -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/style.min.css">
   
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS - Utility-first CSS framework -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Font Awesome (UI icons) -->
+  <!-- Font Awesome - Icon library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- Vue 2 -->
+  <!-- Vue.js 2 - Reactive JavaScript framework -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
 
+  <!-- ============================================
+       TAILWIND CONFIGURATION
+       Extends default theme with custom colors
+       ============================================ -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          // Custom font family
           fontFamily: {
             'geist': ['Geist', 'system-ui', 'sans-serif'],
           },
+          // Custom navy color palette for consistent branding
           colors: {
             navy: {
-              50: '#f0f5fa',
-              100: '#d9e4f0',
-              200: '#b3c9e0',
-              300: '#8daed1',
-              400: '#5c8bbf',
-              500: '#3b6ea8',
-              600: '#2d5a8a',
-              700: '#1e3a5f',
-              800: '#162c47',
-              900: '#0f1e30',
+              50: '#f0f5fa',   // Lightest - backgrounds
+              100: '#d9e4f0',  // Light - subtle backgrounds
+              200: '#b3c9e0',  // Light accent
+              300: '#8daed1',  // Medium light
+              400: '#5c8bbf',  // Medium
+              500: '#3b6ea8',  // Primary
+              600: '#2d5a8a',  // Primary dark
+              700: '#1e3a5f',  // Dark - headings
+              800: '#162c47',  // Darker
+              900: '#0f1e30',  // Darkest
             }
           }
         }
@@ -46,17 +58,23 @@
     }
   </script>
 
+  <!-- ============================================
+       CUSTOM CSS STYLES
+       ============================================ -->
   <style>
-    /* Base Styles */
-    html { scroll-behavior: smooth; }
+    /* ----- BASE STYLES ----- */
+    html { 
+      scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+    }
     
     body {
       font-family: 'Geist', system-ui, sans-serif;
-      background: #ffffff;
+      background: #ffffff; /* Clean white background */
       min-height: 100vh;
     }
 
-    /* Glass Card Effect */
+    /* ----- GLASS CARD EFFECT ----- */
+    /* Creates a subtle frosted glass appearance */
     .glass-card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -64,103 +82,125 @@
       box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
     }
 
-    /* Animations */
+    /* ----- ANIMATIONS ----- */
+    
+    /* Fade in from below - used for page load animations */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-in { animation: fadeInUp 0.5s ease-out forwards; }
+    .animate-fade-in { 
+      animation: fadeInUp 0.5s ease-out forwards; 
+    }
 
+    /* Floating effect - used for header icon */
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-6px); }
     }
-    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-float { 
+      animation: float 3s ease-in-out infinite; 
+    }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .animate-spin-slow { animation: spin 1.5s linear infinite; }
+    /* Spinning loader animation */
+    @keyframes spin { 
+      to { transform: rotate(360deg); } 
+    }
+    .animate-spin-slow { 
+      animation: spin 1.5s linear infinite; 
+    }
 
-    /* Buttons */
+    /* ----- BUTTON STYLES ----- */
+    
+    /* Primary button - Navy blue gradient */
     .btn-primary {
       background: linear-gradient(135deg, #2d5a8a 0%, #3b6ea8 100%);
-      transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(45, 90, 138, 0.3);
+      transition: all 0.3s ease;
     }
     .btn-primary:hover:not(:disabled) {
-      transform: translateY(-2px);
+      transform: translateY(-2px); /* Lift effect on hover */
       box-shadow: 0 6px 16px rgba(45, 90, 138, 0.4);
     }
 
+    /* Secondary button - Green gradient */
     .btn-secondary {
       background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-      transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+      transition: all 0.3s ease;
     }
     .btn-secondary:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
     }
 
+    /* Danger button - Red gradient (for remove/delete) */
     .btn-danger {
       background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-      transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+      transition: all 0.3s ease;
     }
     .btn-danger:hover:not(:disabled) {
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
     }
 
+    /* Disabled button - Gray, no interaction */
     .btn-disabled {
       background: linear-gradient(135deg, #9ca3af 0%, #d1d5db 100%);
       cursor: not-allowed;
       box-shadow: none;
     }
 
-    /* Inputs */
+    /* ----- INPUT STYLES ----- */
     .input-modern {
-      transition: all 0.3s ease;
       border: 2px solid #e5e7eb;
+      transition: all 0.3s ease;
     }
     .input-modern:focus {
       border-color: #3b6ea8;
       box-shadow: 0 0 0 3px rgba(59, 110, 168, 0.15);
       outline: none;
     }
+    /* Error state for invalid input */
     .input-modern.input-error {
       border-color: #ef4444;
       box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
     }
 
-    /* Card Hover */
+    /* ----- LESSON CARD HOVER EFFECTS ----- */
     .lesson-card {
-      transition: all 0.3s ease;
       overflow: hidden;
+      transition: all 0.3s ease;
     }
     .lesson-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-6px); /* Card lifts on hover */
       box-shadow: 0 12px 30px rgba(30, 58, 95, 0.15);
+    }
+    /* Image zoom effect on card hover */
+    .subject-image { 
+      transition: transform 0.3s ease; 
     }
     .lesson-card:hover .subject-image {
       transform: scale(1.05);
     }
-    .subject-image { transition: transform 0.3s ease; }
 
-    /* Radio Buttons */
+    /* ----- CUSTOM RADIO BUTTONS ----- */
     .radio-custom {
-      appearance: none;
+      appearance: none; /* Remove default styling */
       width: 18px;
       height: 18px;
       border: 2px solid #b3c9e0;
       border-radius: 50%;
-      transition: all 0.2s ease;
       cursor: pointer;
       position: relative;
+      transition: all 0.2s ease;
     }
     .radio-custom:checked {
       border-color: #2d5a8a;
       background: #2d5a8a;
     }
+    /* White dot inside checked radio */
     .radio-custom:checked::after {
       content: '';
       position: absolute;
@@ -172,9 +212,11 @@
       background: white;
       border-radius: 50%;
     }
-    .radio-custom:hover { border-color: #3b6ea8; }
+    .radio-custom:hover { 
+      border-color: #3b6ea8; 
+    }
 
-    /* Badge */
+    /* ----- CART COUNT BADGE ----- */
     .badge {
       display: inline-flex;
       align-items: center;
@@ -185,58 +227,71 @@
       font-size: 0.7rem;
       font-weight: 700;
       border-radius: 9999px;
-      background: #fbbf24;
-      color: #1e3a5f;
+      background: #fbbf24; /* Yellow background */
+      color: #1e3a5f;      /* Navy text */
     }
 
-    /* Success Animation */
+    /* ----- SUCCESS MESSAGE ANIMATION ----- */
     @keyframes successPop {
       0% { transform: scale(0.9); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
-    .success-message { animation: successPop 0.3s ease-out forwards; }
+    .success-message { 
+      animation: successPop 0.3s ease-out forwards; 
+    }
   </style>
 </head>
 
+<!-- ============================================
+     HTML BODY - VUE.JS APPLICATION
+     ============================================ -->
 <body class="font-geist text-gray-800 antialiased">
+  
+  <!-- Vue App Root Element -->
   <div id="app">
     <div class="min-h-screen py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
 
-        <!-- Error Banner -->
+        <!-- ========== ERROR BANNER ========== -->
+        <!-- Shows when API calls fail -->
         <div v-if="errorMessage" class="mb-6 glass-card rounded-xl p-4 border-l-4 border-red-500 animate-fade-in">
           <div class="flex items-start justify-between gap-4">
             <div class="flex items-center gap-3">
+              <!-- Error icon -->
               <div class="w-9 h-9 rounded-full bg-red-100 flex items-center justify-center">
                 <i class="fas fa-exclamation-triangle text-red-500"></i>
               </div>
+              <!-- Error text -->
               <div>
                 <h3 class="font-semibold text-gray-900">{{ errorMessageTitle }}</h3>
                 <p class="text-gray-600 text-sm">{{ errorMessage }}</p>
               </div>
             </div>
+            <!-- Dismiss button -->
             <button @click="errorMessage = ''" class="text-gray-400 hover:text-gray-600 p-1">
               <i class="fas fa-times"></i>
             </button>
           </div>
         </div>
 
-        <!-- Header -->
+        <!-- ========== PAGE HEADER ========== -->
         <header class="text-center mb-10 animate-fade-in">
+          <!-- Floating graduation cap icon -->
           <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-navy-700 mb-5 animate-float">
             <i class="fas fa-graduation-cap text-2xl text-white"></i>
           </div>
-          
+          <!-- Main title -->
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-3">
             After-School Lessons
           </h1>
-          
+          <!-- Subtitle -->
           <p class="text-gray-700 text-lg max-w-md mx-auto">
             Discover and book enriching after-school classes for your children
           </p>
         </header>
 
-        <!-- Cart Toggle -->
+        <!-- ========== CART TOGGLE BUTTON ========== -->
+        <!-- Switches between lessons view and cart view -->
         <div class="flex justify-end mb-8 animate-fade-in" style="animation-delay: 0.1s;">
           <button
             @click="showCart = !showCart"
@@ -244,23 +299,28 @@
             :class="[
               'flex items-center gap-2 px-5 py-3 rounded-lg font-semibold transition-all',
               showCart || cart.length > 0 ? 'btn-secondary text-white' : 'btn-disabled text-gray-500'
-            ]"
-          >
+            ]">
+            <!-- Icon changes based on current view -->
             <i :class="showCart ? 'fas fa-store' : 'fas fa-shopping-cart'"></i>
             <span>{{ showCart ? 'View Lessons' : 'View Cart' }}</span>
+            <!-- Cart item count badge -->
             <span v-if="cart.length > 0" class="badge">{{ cart.length }}</span>
           </button>
         </div>
 
-        <!-- Lessons View -->
+        <!-- ============================================
+             LESSONS VIEW
+             Shows search, sort controls, and lesson cards
+             ============================================ -->
         <div v-if="!showCart">
           
-          <!-- Search -->
+          <!-- ========== SEARCH BAR ========== -->
           <div class="glass-card rounded-xl p-5 mb-5 animate-fade-in" style="animation-delay: 0.15s;">
             <label for="search" class="block text-sm font-semibold text-gray-700 mb-2">
               <i class="fas fa-search text-navy-500 mr-2"></i>Search Lessons
             </label>
             <div class="relative">
+              <!-- Search input with debounced handler -->
               <input
                 id="search"
                 type="text"
@@ -271,17 +331,20 @@
               />
               <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
             </div>
+            <!-- Shows current search query -->
             <p v-if="searchQuery" class="text-sm text-gray-600 mt-2">
               <i class="fas fa-filter text-xs mr-1"></i>Results for: <strong>"{{ searchQuery }}"</strong>
             </p>
           </div>
 
-          <!-- Sort -->
+          <!-- ========== SORT CONTROLS ========== -->
           <div class="glass-card rounded-xl p-5 mb-6 animate-fade-in" style="animation-delay: 0.2s;">
             <h3 class="text-base font-bold text-gray-800 mb-4">
               <i class="fas fa-sliders text-navy-500 mr-2"></i>Sort Options
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <!-- Sort Attribute Selection -->
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Attribute</label>
                 <div class="space-y-2">
@@ -303,23 +366,29 @@
                   </label>
                 </div>
               </div>
+              
+              <!-- Sort Order Selection -->
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">Order</label>
                 <div class="space-y-2">
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="sortOrder" value="asc" v-model="sortOrder" class="radio-custom" />
-                    <span class="text-gray-700"><i class="fas fa-arrow-up-short-wide mr-1 text-navy-400"></i>Ascending</span>
+                    <span class="text-gray-700">
+                      <i class="fas fa-arrow-up-short-wide mr-1 text-navy-400"></i>Ascending
+                    </span>
                   </label>
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input type="radio" name="sortOrder" value="desc" v-model="sortOrder" class="radio-custom" />
-                    <span class="text-gray-700"><i class="fas fa-arrow-down-wide-short mr-1 text-navy-400"></i>Descending</span>
+                    <span class="text-gray-700">
+                      <i class="fas fa-arrow-down-wide-short mr-1 text-navy-400"></i>Descending
+                    </span>
                   </label>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Loading -->
+          <!-- ========== LOADING SPINNER ========== -->
           <div v-if="loading" class="text-center py-16 animate-fade-in">
             <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-navy-700 mb-4">
               <i class="fas fa-circle-notch text-2xl text-white animate-spin-slow"></i>
@@ -327,51 +396,66 @@
             <p class="text-gray-600 text-lg">Loading lessons...</p>
           </div>
 
-          <!-- Lessons Grid -->
+          <!-- ========== LESSONS GRID ========== -->
           <div v-else-if="displayedLessons.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div v-for="(lesson, index) in displayedLessons" 
-                 :key="lesson._id" 
-                 class="lesson-card glass-card rounded-xl animate-fade-in"
-                 :style="'animation-delay: ' + (0.05 * index) + 's'">
+            
+            <!-- Individual Lesson Card -->
+            <div 
+              v-for="(lesson, index) in displayedLessons" 
+              :key="lesson._id" 
+              class="lesson-card glass-card rounded-xl animate-fade-in"
+              :style="'animation-delay: ' + (0.05 * index) + 's'">
               
-              <!-- Image -->
+              <!-- Subject Image -->
               <div class="h-44 overflow-hidden rounded-t-xl">
-                <img :src="getSubjectImage(lesson.subject)" :alt="lesson.subject" class="subject-image w-full h-full object-cover" />
+                <img 
+                  :src="getSubjectImage(lesson.subject)" 
+                  :alt="lesson.subject" 
+                  class="subject-image w-full h-full object-cover" 
+                />
               </div>
               
-              <!-- Content -->
+              <!-- Card Content -->
               <div class="p-5">
+                <!-- Subject Name -->
                 <h3 class="text-xl font-bold text-gray-900 mb-3">{{ lesson.subject }}</h3>
                 
+                <!-- Lesson Details -->
                 <div class="space-y-2 mb-4 text-sm">
+                  <!-- Location -->
                   <p class="flex items-center gap-2 text-gray-600">
                     <span class="w-7 h-7 rounded bg-navy-100 flex items-center justify-center">
                       <i class="fas fa-map-marker-alt text-navy-600 text-xs"></i>
                     </span>
                     {{ lesson.location }}
                   </p>
+                  <!-- Price -->
                   <p class="flex items-center gap-2 text-gray-600">
                     <span class="w-7 h-7 rounded bg-navy-100 flex items-center justify-center">
                       <i class="fas fa-pound-sign text-navy-600 text-xs"></i>
                     </span>
                     <span class="font-semibold text-gray-800">£{{ lesson.price }}</span>
                   </p>
+                  <!-- Available Spaces -->
                   <p class="flex items-center gap-2" :class="lesson.spaces === 0 ? 'text-red-500' : 'text-gray-600'">
-                    <span class="w-7 h-7 rounded flex items-center justify-center" :class="lesson.spaces === 0 ? 'bg-red-100' : 'bg-navy-100'">
+                    <span class="w-7 h-7 rounded flex items-center justify-center" 
+                          :class="lesson.spaces === 0 ? 'bg-red-100' : 'bg-navy-100'">
                       <i class="fas fa-users text-xs" :class="lesson.spaces === 0 ? 'text-red-500' : 'text-navy-600'"></i>
                     </span>
-                    <span :class="lesson.spaces === 0 ? 'font-semibold' : ''">{{ lesson.spaces }} spaces</span>
+                    <span :class="lesson.spaces === 0 ? 'font-semibold' : ''">
+                      {{ lesson.spaces }} spaces
+                    </span>
                   </p>
                 </div>
                 
+                <!-- Add to Cart Button -->
                 <button
                   @click="addToCart(lesson)"
                   :disabled="lesson.spaces === 0"
                   :class="[
                     'w-full py-3 rounded-lg font-semibold transition-all',
                     lesson.spaces > 0 ? 'btn-primary text-white' : 'btn-disabled text-gray-500'
-                  ]"
-                >
+                  ]">
                   <i :class="lesson.spaces > 0 ? 'fas fa-cart-plus mr-2' : 'fas fa-ban mr-2'"></i>
                   {{ lesson.spaces > 0 ? 'Add to Cart' : 'Out of Stock' }}
                 </button>
@@ -379,7 +463,7 @@
             </div>
           </div>
 
-          <!-- No Results -->
+          <!-- ========== NO RESULTS MESSAGE ========== -->
           <div v-else class="text-center py-16 animate-fade-in">
             <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gray-200 mb-4">
               <i class="fas fa-search-minus text-3xl text-gray-400"></i>
@@ -389,31 +473,49 @@
           </div>
         </div>
 
-        <!-- Cart View -->
+        <!-- ============================================
+             CART VIEW
+             Shows cart items, total, and checkout form
+             ============================================ -->
         <div v-else class="max-w-2xl mx-auto">
+          
+          <!-- Cart Header -->
           <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2 animate-fade-in">
             <i class="fas fa-shopping-cart text-navy-600"></i>Shopping Cart
           </h2>
           
+          <!-- ========== CART ITEMS LIST ========== -->
           <div v-if="cart.length > 0" class="mb-5 space-y-3">
-            <div v-for="(item, index) in cart" :key="index" 
-                 class="glass-card rounded-xl p-4 flex justify-between items-center gap-3 animate-fade-in"
-                 :style="'animation-delay: ' + (0.05 * index) + 's'">
+            
+            <!-- Individual Cart Item -->
+            <div 
+              v-for="(item, index) in cart" 
+              :key="index" 
+              class="glass-card rounded-xl p-4 flex justify-between items-center gap-3 animate-fade-in"
+              :style="'animation-delay: ' + (0.05 * index) + 's'">
+              
               <div class="flex items-center gap-3">
+                <!-- Item Thumbnail -->
                 <div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
                   <img :src="getSubjectImage(item.subject)" :alt="item.subject" class="w-full h-full object-cover" />
                 </div>
+                <!-- Item Details -->
                 <div>
                   <h4 class="font-bold text-gray-900">{{ item.subject }}</h4>
-                  <p class="text-xs text-gray-500"><i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}</p>
+                  <p class="text-xs text-gray-500">
+                    <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
+                  </p>
                   <p class="text-sm font-semibold text-navy-600">£{{ item.price }}</p>
                 </div>
               </div>
+              
+              <!-- Remove Button -->
               <button @click="removeFromCart(item)" class="btn-danger text-white px-3 py-2 rounded-lg font-semibold text-sm">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>
             
+            <!-- ========== CART TOTAL ========== -->
             <div class="glass-card rounded-xl p-4 mt-4">
               <div class="flex justify-between items-center">
                 <span class="text-lg font-semibold text-gray-700">Total</span>
@@ -422,6 +524,7 @@
             </div>
           </div>
 
+          <!-- ========== EMPTY CART MESSAGE ========== -->
           <div v-else class="text-center py-16 animate-fade-in">
             <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gray-200 mb-4">
               <i class="fas fa-shopping-basket text-3xl text-gray-400"></i>
@@ -429,16 +532,19 @@
             <p class="text-gray-600 text-lg">Your cart is empty</p>
           </div>
 
-          <!-- Checkout -->
+          <!-- ========== CHECKOUT FORM ========== -->
           <div v-if="cart.length > 0" class="glass-card rounded-xl p-5 animate-fade-in" style="animation-delay: 0.15s;">
             <h3 class="text-xl font-bold text-gray-900 mb-5">
               <i class="fas fa-credit-card text-navy-500 mr-2"></i>Checkout
             </h3>
             
             <div class="space-y-4">
+              
+              <!-- Name Input -->
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
-                  <i class="fas fa-user text-navy-400 mr-1"></i>Name <span class="font-normal text-gray-400">(letters only)</span>
+                  <i class="fas fa-user text-navy-400 mr-1"></i>Name 
+                  <span class="font-normal text-gray-400">(letters only)</span>
                 </label>
                 <input
                   v-model="checkoutName"
@@ -447,14 +553,17 @@
                   class="w-full px-4 py-3 rounded-lg input-modern"
                   :class="{ 'input-error': checkoutName && !isNameValid }"
                 />
+                <!-- Validation error message -->
                 <p v-if="checkoutName && !isNameValid" class="text-red-500 text-xs mt-1">
                   <i class="fas fa-exclamation-circle mr-1"></i>Letters and spaces only
                 </p>
               </div>
 
+              <!-- Phone Input -->
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-1">
-                  <i class="fas fa-phone text-navy-400 mr-1"></i>Phone <span class="font-normal text-gray-400">(numbers only)</span>
+                  <i class="fas fa-phone text-navy-400 mr-1"></i>Phone 
+                  <span class="font-normal text-gray-400">(numbers only)</span>
                 </label>
                 <input
                   v-model="checkoutPhone"
@@ -463,23 +572,25 @@
                   class="w-full px-4 py-3 rounded-lg input-modern"
                   :class="{ 'input-error': checkoutPhone && !isPhoneValid }"
                 />
+                <!-- Validation error message -->
                 <p v-if="checkoutPhone && !isPhoneValid" class="text-red-500 text-xs mt-1">
                   <i class="fas fa-exclamation-circle mr-1"></i>Numbers only
                 </p>
               </div>
 
+              <!-- Submit Order Button -->
               <button
                 @click="submitOrder"
                 :disabled="!isCheckoutValid"
                 :class="[
                   'w-full py-3 rounded-lg font-bold text-lg transition-all mt-2',
                   isCheckoutValid ? 'btn-primary text-white' : 'btn-disabled text-gray-500'
-                ]"
-              >
+                ]">
                 <i class="fas fa-paper-plane mr-2"></i>Submit Order
               </button>
             </div>
 
+            <!-- ========== SUCCESS MESSAGE ========== -->
             <div v-if="orderSubmitted" class="mt-5 p-4 bg-green-50 border border-green-200 rounded-lg success-message">
               <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-full bg-green-500 flex items-center justify-center">
@@ -494,7 +605,7 @@
           </div>
         </div>
 
-        <!-- Footer -->
+        <!-- ========== PAGE FOOTER ========== -->
         <footer class="text-center mt-12 pb-6">
           <p class="text-gray-500 text-sm">
             Built with <i class="fas fa-heart text-red-400 mx-1"></i> for CST3144 Coursework
@@ -505,18 +616,28 @@
     </div>
   </div>
 
+  <!-- ============================================
+       VUE.JS APPLICATION
+       ============================================ -->
   <script>
-    // Vue 2 App - CST3144 Coursework
-    // Student: Mohammad Amaan Khan (M00986493)
-    
+    /**
+     * After-School Lessons Vue App
+     * CST3144 Coursework
+     * Student: Mohammad Amaan Khan (M00986493)
+     */
     new Vue({
+      // Mount to #app element
       el: '#app',
       
+      /**
+       * Application State
+       */
       data: function() {
         return {
+          // Backend API URL (Render deployment)
           apiBaseUrl: 'https://cst3144-backend-f7yf.onrender.com',
           
-          // Subject images mapping
+          // Maps subject names to their image files
           subjectImages: {
             'Art': 'europeana-rMV45VgcRbQ-unsplash.jpg',
             'Music': 'igor-omilaev-0d7is4rDYIA-unsplash.jpg',
@@ -526,61 +647,94 @@
             'Science': 'nasa-rTZW4f02zY8-unsplash.jpg'
           },
           
-          lessons: [],
-          cart: [],
-          showCart: false,
-          searchQuery: '',
-          sortBy: 'subject',
-          sortOrder: 'asc',
-          checkoutName: '',
-          checkoutPhone: '',
-          orderSubmitted: false,
-          loading: true,
+          // Data arrays
+          lessons: [],        // All lessons from API
+          cart: [],           // Items added to cart
+          
+          // UI state
+          showCart: false,    // Toggle between lessons/cart view
+          loading: true,      // Shows loading spinner
+          
+          // Search & sort
+          searchQuery: '',    // Current search text
+          sortBy: 'subject',  // Sort attribute
+          sortOrder: 'asc',   // Sort direction
+          
+          // Checkout form
+          checkoutName: '',   // Customer name
+          checkoutPhone: '',  // Customer phone
+          orderSubmitted: false, // Shows success message
+          
+          // Error handling
           errorMessage: '',
           errorMessageTitle: 'Something went wrong',
+          
+          // Search debounce timer
           searchTimer: null
         };
       },
 
+      /**
+       * Computed Properties
+       * Automatically recalculate when dependencies change
+       */
       computed: {
+        // Returns sorted lessons array based on current sort settings
         displayedLessons: function() {
           var self = this;
           return this.lessons.slice().sort(function(a, b) {
             var aVal = a[self.sortBy];
             var bVal = b[self.sortBy];
+            // Case-insensitive string comparison
             if (typeof aVal === 'string') aVal = aVal.toLowerCase();
             if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+            // Sort comparison
             if (aVal < bVal) return self.sortOrder === 'asc' ? -1 : 1;
             if (aVal > bVal) return self.sortOrder === 'asc' ? 1 : -1;
             return 0;
           });
         },
         
+        // Calculates total price of all cart items
         cartTotal: function() {
-          return this.cart.reduce(function(sum, item) { return sum + item.price; }, 0);
+          return this.cart.reduce(function(sum, item) { 
+            return sum + item.price; 
+          }, 0);
         },
         
+        // Validates name: letters and spaces only
         isNameValid: function() {
           return /^[a-zA-Z\s]+$/.test(this.checkoutName);
         },
         
+        // Validates phone: numbers only
         isPhoneValid: function() {
           return /^[0-9]+$/.test(this.checkoutPhone);
         },
         
+        // Checkout button enabled when both fields are valid
         isCheckoutValid: function() {
-          return this.checkoutName && this.checkoutPhone && this.isNameValid && this.isPhoneValid;
+          return this.checkoutName && 
+                 this.checkoutPhone && 
+                 this.isNameValid && 
+                 this.isPhoneValid;
         }
       },
 
+      /**
+       * Methods
+       */
       methods: {
+        // Returns image filename for a subject
         getSubjectImage: function(subject) {
           return this.subjectImages[subject] || 'nasa-rTZW4f02zY8-unsplash.jpg';
         },
         
+        // Fetches all lessons from the API
         fetchLessons: function() {
           var self = this;
           self.loading = true;
+          
           fetch(this.apiBaseUrl + '/lessons')
             .then(function(res) {
               if (!res.ok) throw new Error('Failed to fetch');
@@ -597,44 +751,72 @@
             });
         },
         
+        // Debounced search handler (waits 300ms after typing stops)
         handleSearch: function() {
           var self = this;
           if (this.searchTimer) clearTimeout(this.searchTimer);
-          this.searchTimer = setTimeout(function() { self.performSearch(); }, 300);
+          this.searchTimer = setTimeout(function() { 
+            self.performSearch(); 
+          }, 300);
         },
         
+        // Executes search API call
         performSearch: function() {
           var self = this;
-          if (!this.searchQuery) { this.fetchLessons(); return; }
+          
+          // If search is empty, fetch all lessons
+          if (!this.searchQuery) { 
+            this.fetchLessons(); 
+            return; 
+          }
+          
           fetch(this.apiBaseUrl + '/search?q=' + encodeURIComponent(this.searchQuery))
             .then(function(res) {
               if (!res.ok) throw new Error('Search failed');
               return res.json();
             })
-            .then(function(data) { self.lessons = data; })
+            .then(function(data) { 
+              self.lessons = data; 
+            })
             .catch(function(err) {
               self.errorMessageTitle = 'Search failed';
               self.errorMessage = 'Please try again.';
             });
         },
         
+        // Adds a lesson to the cart
         addToCart: function(lesson) {
           if (lesson.spaces > 0) {
+            // Add a copy of the lesson to cart
             this.cart.push(JSON.parse(JSON.stringify(lesson)));
-            var idx = this.lessons.findIndex(function(l) { return l._id === lesson._id; });
+            // Decrease available spaces
+            var idx = this.lessons.findIndex(function(l) { 
+              return l._id === lesson._id; 
+            });
             if (idx !== -1) this.lessons[idx].spaces--;
           }
         },
         
+        // Removes an item from the cart
         removeFromCart: function(item) {
-          var cartIdx = this.cart.findIndex(function(i) { return i._id === item._id; });
+          // Remove from cart array
+          var cartIdx = this.cart.findIndex(function(i) { 
+            return i._id === item._id; 
+          });
           if (cartIdx !== -1) this.cart.splice(cartIdx, 1);
-          var lessonIdx = this.lessons.findIndex(function(l) { return l._id === item._id; });
+          
+          // Restore the space to the lesson
+          var lessonIdx = this.lessons.findIndex(function(l) { 
+            return l._id === item._id; 
+          });
           if (lessonIdx !== -1) this.lessons[lessonIdx].spaces++;
         },
         
+        // Submits the order to the backend
         submitOrder: function() {
           var self = this;
+          
+          // Prepare order data
           var orderData = {
             name: this.checkoutName,
             phone: this.checkoutPhone,
@@ -642,6 +824,7 @@
             spaces: this.cart.length
           };
           
+          // POST to orders endpoint
           fetch(this.apiBaseUrl + '/orders', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -651,9 +834,15 @@
             if (!res.ok) throw new Error('Order failed');
             return res.json();
           })
-          .then(function() { return self.updateLessonSpaces(); })
+          .then(function() { 
+            // Update lesson spaces in database
+            return self.updateLessonSpaces(); 
+          })
           .then(function() {
+            // Show success message
             self.orderSubmitted = true;
+            
+            // Reset after 2 seconds
             setTimeout(function() {
               self.cart = [];
               self.checkoutName = '';
@@ -669,35 +858,54 @@
           });
         },
         
+        // Updates lesson spaces in database after order
         updateLessonSpaces: function() {
           var self = this;
+          
+          // Group cart items by lesson ID and count
           var updates = {};
           this.cart.forEach(function(item) {
-            if (!updates[item._id]) updates[item._id] = { spaces: item.spaces, count: 0 };
+            if (!updates[item._id]) {
+              updates[item._id] = { spaces: item.spaces, count: 0 };
+            }
             updates[item._id].count++;
           });
           
+          // Send PUT request for each lesson
           var promises = Object.keys(updates).map(function(id) {
             return fetch(self.apiBaseUrl + '/lessons/' + id, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ spaces: updates[id].spaces - updates[id].count })
+              body: JSON.stringify({ 
+                spaces: updates[id].spaces - updates[id].count 
+              })
             });
           });
+          
           return Promise.all(promises);
         },
         
+        // Saves app state to localStorage
         persistState: function() {
           try {
             localStorage.setItem('cst3144_state', JSON.stringify({
-              cart: this.cart, searchQuery: this.searchQuery,
-              sortBy: this.sortBy, sortOrder: this.sortOrder, showCart: this.showCart
+              cart: this.cart,
+              searchQuery: this.searchQuery,
+              sortBy: this.sortBy,
+              sortOrder: this.sortOrder,
+              showCart: this.showCart
             }));
-          } catch (e) {}
+          } catch (e) {
+            // Ignore storage errors
+          }
         }
       },
 
+      /**
+       * Lifecycle Hook - Runs when app mounts
+       */
       mounted: function() {
+        // Restore saved state from localStorage
         try {
           var saved = JSON.parse(localStorage.getItem('cst3144_state') || '{}');
           if (saved.cart) this.cart = saved.cart;
@@ -705,10 +913,17 @@
           if (saved.sortBy) this.sortBy = saved.sortBy;
           if (saved.sortOrder) this.sortOrder = saved.sortOrder;
           if (saved.showCart !== undefined) this.showCart = saved.showCart;
-        } catch (e) {}
+        } catch (e) {
+          // Ignore parse errors
+        }
+        
+        // Load lessons from API
         this.fetchLessons();
       },
 
+      /**
+       * Watchers - Save state when data changes
+       */
       watch: {
         cart: { deep: true, handler: function() { this.persistState(); } },
         searchQuery: function() { this.persistState(); },

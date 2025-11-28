@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>After-School Lessons</title>
   <meta name="description" content="CST3144 After-School Lessons app built with Vue 2 (CDN). Browse, search, sort and book lessons with a simple cart and checkout.">
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#1e1b4b">
   <link rel="icon" href="https://fav.farm/🎓" />
+  
+  <!-- Google Fonts - Distinctive Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,55 +21,442 @@
   
   <!-- Vue 2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+
+  <!-- Custom Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'display': ['Playfair Display', 'serif'],
+            'body': ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            // Rich indigo-based palette with warm accents
+            midnight: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              300: '#c4b5fd',
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+              950: '#1e1b4b',
+            },
+            coral: {
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+            },
+            gold: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles -->
+  <style>
+    /* ========================================
+       GLOBAL STYLES & CSS VARIABLES
+       ======================================== */
+    :root {
+      --gradient-primary: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+      --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(249,250,251,0.98) 100%);
+      --gradient-accent: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+      --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
+    }
+
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
+
+    /* Base body styles */
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gradient-primary);
+      min-height: 100vh;
+    }
+
+    /* ========================================
+       TYPOGRAPHY
+       ======================================== */
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-body { font-family: 'DM Sans', sans-serif; }
+
+    /* ========================================
+       BACKGROUND PATTERN
+       Subtle geometric pattern for depth
+       ======================================== */
+    .bg-pattern {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(244, 63, 94, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ========================================
+       GLASSMORPHISM CARDS
+       Modern frosted glass effect
+       ======================================== */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 10px 15px -3px rgba(0, 0, 0, 0.08),
+        var(--shadow-glow);
+    }
+
+    .glass-dark {
+      background: rgba(30, 27, 75, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    /* ========================================
+       ANIMATIONS & TRANSITIONS
+       ======================================== */
+    
+    /* Fade-in animation for page load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered entrance for cards */
+    .animate-fade-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* Pulse animation for loading */
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+
+    .animate-pulse-gentle {
+      animation: gentlePulse 2s ease-in-out infinite;
+    }
+
+    /* Floating animation for icons */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-spin-slow {
+      animation: spin 1.5s linear infinite;
+    }
+
+    /* ========================================
+       BUTTON STYLES
+       ======================================== */
+    .btn-primary {
+      background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(109, 40, 217, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(109, 40, 217, 0.45);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.45);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
+    }
+
+    /* Disabled button state */
+    .btn-disabled {
+      background: linear-gradient(135deg, #9ca3af 0%, #d1d5db 100%);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ========================================
+       INPUT STYLES
+       ======================================== */
+    .input-modern {
+      transition: all 0.3s ease;
+      border: 2px solid #e5e7eb;
+    }
+
+    .input-modern:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+      outline: none;
+    }
+
+    .input-modern.input-error {
+      border-color: #f43f5e;
+      box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.1);
+    }
+
+    /* ========================================
+       CARD HOVER EFFECTS
+       ======================================== */
+    .lesson-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .lesson-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04),
+        0 0 40px rgba(139, 92, 246, 0.15);
+    }
+
+    /* Icon container with gradient background */
+    .icon-container {
+      background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+      transition: all 0.3s ease;
+    }
+
+    .lesson-card:hover .icon-container {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
+    }
+
+    /* ========================================
+       RADIO BUTTON CUSTOM STYLES
+       ======================================== */
+    .radio-custom {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #c4b5fd;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .radio-custom:checked {
+      border-color: #7c3aed;
+      background: #7c3aed;
+    }
+
+    .radio-custom:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .radio-custom:hover {
+      border-color: #8b5cf6;
+    }
+
+    /* ========================================
+       SCROLLBAR STYLING
+       ======================================== */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(30, 27, 75, 0.1);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+    }
+
+    /* ========================================
+       BADGE STYLES
+       ======================================== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 9999px;
+    }
+
+    .badge-primary {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #1e1b4b;
+    }
+
+    /* ========================================
+       SUCCESS MESSAGE ANIMATION
+       ======================================== */
+    @keyframes successPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .success-message {
+      animation: successPop 0.4s ease-out forwards;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-  <div id="app">
-    <div class="min-h-screen py-8 px-4">
+
+<body class="font-body text-gray-800 antialiased">
+  <!-- Background Pattern Layer -->
+  <div class="bg-pattern"></div>
+
+  <!-- Main Vue App Container -->
+  <div id="app" class="relative z-10">
+    <div class="min-h-screen py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
-        <!-- Error Banner -->
-        <div v-if="errorMessage" class="mb-4 p-4 rounded-lg border border-red-300 bg-red-50 text-red-700" role="alert" aria-live="polite">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2">
-              <i class="fas fa-triangle-exclamation"></i>
-              <span class="font-semibold">{{ errorMessageTitle }}</span>
+
+        <!-- ==========================================
+             ERROR BANNER
+             Shows API errors with dismiss button
+             ========================================== -->
+        <transition name="fade">
+          <div v-if="errorMessage" 
+               class="mb-6 glass-card rounded-2xl p-5 border-l-4 border-coral-500 animate-fade-in" 
+               role="alert" 
+               aria-live="polite">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <!-- Warning Icon -->
+                <div class="w-10 h-10 rounded-full bg-coral-500/10 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-exclamation-triangle text-coral-500"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-900">{{ errorMessageTitle }}</h3>
+                  <p class="text-gray-600 text-sm mt-0.5">{{ errorMessage }}</p>
+                </div>
+              </div>
+              <!-- Dismiss Button -->
+              <button @click="errorMessage = ''" 
+                      class="text-gray-400 hover:text-gray-600 transition-colors p-1" 
+                      aria-label="Dismiss error">
+                <i class="fas fa-times"></i>
+              </button>
             </div>
-            <button @click="errorMessage = ''" class="text-red-600 hover:text-red-800 focus:outline-none" aria-label="Dismiss error">
-              <i class="fas fa-times"></i>
-            </button>
           </div>
-          <p class="mt-1">{{ errorMessage }}</p>
-        </div>
-        <!-- Header -->
-        <header class="text-center mb-8">
-          <h1 class="text-4xl font-bold text-gray-800 mb-2">After-School Lessons</h1>
-          <p class="text-gray-600">Browse and book after-school classes for your children</p>
+        </transition>
+
+        <!-- ==========================================
+             HEADER SECTION
+             App title and tagline
+             ========================================== -->
+        <header class="text-center mb-10 animate-fade-in">
+          <!-- Decorative Icon -->
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl glass-dark mb-6 animate-float">
+            <i class="fas fa-graduation-cap text-3xl text-gold-400"></i>
+          </div>
+          
+          <!-- Main Title -->
+          <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight">
+            After-School
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-coral-400">
+              Lessons
+            </span>
+          </h1>
+          
+          <!-- Tagline -->
+          <p class="text-midnight-200 text-lg max-w-md mx-auto">
+            Discover and book enriching after-school classes for your children
+          </p>
         </header>
 
-        <!-- Shopping Cart Button -->
-        <div class="flex justify-end mb-6">
+        <!-- ==========================================
+             CART TOGGLE BUTTON
+             Switches between lessons view and cart view
+             ========================================== -->
+        <div class="flex justify-end mb-8 animate-fade-in" style="animation-delay: 0.1s;">
           <button
             @click="showCart = !showCart"
             :disabled="!showCart && cart.length === 0"
             :class="[
-              'flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-green-500',
+              'flex items-center gap-3 px-6 py-3.5 rounded-xl font-semibold transition-all duration-300 focus:ring-4 focus:ring-offset-2',
               showCart || cart.length > 0
-                ? 'bg-green-600 text-white hover:bg-green-700 cursor-pointer'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'btn-secondary text-white focus:ring-emerald-500/50'
+                : 'btn-disabled text-gray-500'
             ]"
           >
-            <i class="fas fa-shopping-cart"></i>
-            {{ showCart ? 'View Lessons' : 'View Cart' }}
-            <span v-if="cart.length > 0" class="bg-white text-green-600 rounded-full px-2 py-1 text-sm">
+            <i :class="showCart ? 'fas fa-store' : 'fas fa-shopping-cart'"></i>
+            <span>{{ showCart ? 'View Lessons' : 'View Cart' }}</span>
+            <!-- Cart Count Badge -->
+            <span v-if="cart.length > 0" class="badge badge-primary">
               {{ cart.length }}
             </span>
           </button>
         </div>
 
-        <!-- Lessons View -->
+        <!-- ==========================================
+             LESSONS VIEW
+             Shows search, sort, and lesson cards
+             ========================================== -->
         <div v-if="!showCart">
-          <!-- Search Bar -->
-          <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <label for="search-input" class="block text-sm font-semibold text-gray-700 mb-2">
+          
+          <!-- Search Bar Section -->
+          <div class="glass-card rounded-2xl p-6 mb-6 animate-fade-in" style="animation-delay: 0.15s;">
+            <label for="search-input" class="block text-sm font-semibold text-gray-700 mb-3">
+              <i class="fas fa-search text-midnight-500 mr-2"></i>
               Search Lessons
             </label>
             <div class="relative">
@@ -74,53 +466,78 @@
                 v-model="searchQuery"
                 @input="handleSearch"
                 placeholder="Search by subject, location, price, or spaces..."
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-5 py-4 rounded-xl input-modern font-medium text-gray-800 placeholder:text-gray-400"
               />
-              <i class="fas fa-search absolute right-4 top-4 text-gray-400"></i>
+              <!-- Animated Search Icon -->
+              <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                <i class="fas fa-search text-midnight-400"></i>
+              </div>
             </div>
-            <p v-if="searchQuery" class="text-sm text-gray-500 mt-2">
-              Searching for: "{{ searchQuery }}"
+            <!-- Search Query Display -->
+            <p v-if="searchQuery" class="text-sm text-midnight-600 mt-3 flex items-center gap-2">
+              <i class="fas fa-filter text-xs"></i>
+              Showing results for: <strong>"{{ searchQuery }}"</strong>
             </p>
           </div>
 
-          <!-- Sort Controls -->
-          <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Sort by</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Sort Attribute -->
+          <!-- Sort Controls Section -->
+          <div class="glass-card rounded-2xl p-6 mb-8 animate-fade-in" style="animation-delay: 0.2s;">
+            <h3 class="text-lg font-bold text-gray-800 mb-5 flex items-center gap-2">
+              <i class="fas fa-sliders text-midnight-500"></i>
+              Sort Options
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              
+              <!-- Sort Attribute Radio Group -->
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Attribute</label>
-                <div class="space-y-2">
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="sortAttribute" value="subject" v-model="sortBy" class="mr-2" />
-                    <span class="text-gray-700">Subject</span>
+                <label class="block text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">
+                  Attribute
+                </label>
+                <div class="space-y-3">
+                  <!-- Subject Option -->
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="sortAttribute" value="subject" v-model="sortBy" class="radio-custom" />
+                    <span class="text-gray-700 group-hover:text-midnight-700 transition-colors">Subject</span>
                   </label>
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="sortAttribute" value="location" v-model="sortBy" class="mr-2" />
-                    <span class="text-gray-700">Location</span>
+                  <!-- Location Option -->
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="sortAttribute" value="location" v-model="sortBy" class="radio-custom" />
+                    <span class="text-gray-700 group-hover:text-midnight-700 transition-colors">Location</span>
                   </label>
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="sortAttribute" value="price" v-model="sortBy" class="mr-2" />
-                    <span class="text-gray-700">Price</span>
+                  <!-- Price Option -->
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="sortAttribute" value="price" v-model="sortBy" class="radio-custom" />
+                    <span class="text-gray-700 group-hover:text-midnight-700 transition-colors">Price</span>
                   </label>
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="sortAttribute" value="spaces" v-model="sortBy" class="mr-2" />
-                    <span class="text-gray-700">Availability (Spaces)</span>
+                  <!-- Availability Option -->
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="sortAttribute" value="spaces" v-model="sortBy" class="radio-custom" />
+                    <span class="text-gray-700 group-hover:text-midnight-700 transition-colors">Availability (Spaces)</span>
                   </label>
                 </div>
               </div>
 
-              <!-- Sort Order -->
+              <!-- Sort Order Radio Group -->
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Order</label>
-                <div class="space-y-2">
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="sortOrder" value="asc" v-model="sortOrder" class="mr-2" />
-                    <span class="text-gray-700">Ascending</span>
+                <label class="block text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">
+                  Order
+                </label>
+                <div class="space-y-3">
+                  <!-- Ascending Option -->
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="sortOrder" value="asc" v-model="sortOrder" class="radio-custom" />
+                    <span class="text-gray-700 group-hover:text-midnight-700 transition-colors">
+                      <i class="fas fa-arrow-up-short-wide mr-2 text-midnight-400"></i>
+                      Ascending
+                    </span>
                   </label>
-                  <label class="flex items-center cursor-pointer">
-                    <input type="radio" name="sortOrder" value="desc" v-model="sortOrder" class="mr-2" />
-                    <span class="text-gray-700">Descending</span>
+                  <!-- Descending Option -->
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="sortOrder" value="desc" v-model="sortOrder" class="radio-custom" />
+                    <span class="text-gray-700 group-hover:text-midnight-700 transition-colors">
+                      <i class="fas fa-arrow-down-wide-short mr-2 text-midnight-400"></i>
+                      Descending
+                    </span>
                   </label>
                 </div>
               </div>
@@ -128,153 +545,249 @@
           </div>
 
           <!-- Loading State -->
-          <div v-if="loading" class="text-center py-12">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p class="text-gray-600 mt-4">Loading lessons...</p>
+          <div v-if="loading" class="text-center py-16 animate-fade-in">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl glass-dark mb-6">
+              <i class="fas fa-circle-notch text-3xl text-gold-400 animate-spin-slow"></i>
+            </div>
+            <p class="text-midnight-200 text-lg font-medium animate-pulse-gentle">Loading lessons...</p>
           </div>
 
           <!-- Lessons Grid -->
           <div v-else-if="displayedLessons.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Lesson Card Component -->
-            <div v-for="lesson in displayedLessons" :key="lesson._id" 
-                 class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-              <div class="flex justify-center mb-4">
-                <i :class="`fas ${lesson.icon} text-4xl text-blue-600`"></i>
+            
+            <!-- Individual Lesson Card -->
+            <div v-for="(lesson, index) in displayedLessons" 
+                 :key="lesson._id" 
+                 class="lesson-card glass-card rounded-2xl p-6 animate-fade-in"
+                 :style="'animation-delay: ' + (0.1 * index) + 's'">
+              
+              <!-- Lesson Icon -->
+              <div class="flex justify-center mb-5">
+                <div class="icon-container w-16 h-16 rounded-2xl flex items-center justify-center">
+                  <i :class="`fas ${lesson.icon} text-3xl text-midnight-600`"></i>
+                </div>
               </div>
-              <h3 class="text-xl font-bold text-gray-800 mb-2">{{ lesson.subject }}</h3>
-              <p class="text-gray-600 mb-1">
-                <i class="fas fa-map-marker-alt mr-2"></i>{{ lesson.location }}
-              </p>
-              <p class="text-gray-600 mb-1">
-                <i class="fas fa-pound-sign mr-2"></i>{{ lesson.price }}
-              </p>
-              <p class="text-gray-600 mb-4" :class="{ 'text-red-600 font-semibold': lesson.spaces === 0 }">
-                <i class="fas fa-users mr-2"></i>{{ lesson.spaces }} spaces available
-              </p>
+              
+              <!-- Lesson Subject Title -->
+              <h3 class="font-display text-2xl font-bold text-gray-900 mb-4 text-center">
+                {{ lesson.subject }}
+              </h3>
+              
+              <!-- Lesson Details -->
+              <div class="space-y-2.5 mb-5">
+                <!-- Location -->
+                <p class="flex items-center gap-3 text-gray-600">
+                  <span class="w-8 h-8 rounded-lg bg-midnight-100 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-map-marker-alt text-midnight-500 text-sm"></i>
+                  </span>
+                  {{ lesson.location }}
+                </p>
+                <!-- Price -->
+                <p class="flex items-center gap-3 text-gray-600">
+                  <span class="w-8 h-8 rounded-lg bg-midnight-100 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-pound-sign text-midnight-500 text-sm"></i>
+                  </span>
+                  <span class="font-semibold text-gray-800">£{{ lesson.price }}</span>
+                </p>
+                <!-- Availability (Spaces) -->
+                <p class="flex items-center gap-3" :class="lesson.spaces === 0 ? 'text-coral-500' : 'text-gray-600'">
+                  <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                        :class="lesson.spaces === 0 ? 'bg-coral-100' : 'bg-midnight-100'">
+                    <i class="fas fa-users text-sm" :class="lesson.spaces === 0 ? 'text-coral-500' : 'text-midnight-500'"></i>
+                  </span>
+                  <span :class="lesson.spaces === 0 ? 'font-bold' : ''">
+                    {{ lesson.spaces }} {{ lesson.spaces === 1 ? 'space' : 'spaces' }} available
+                  </span>
+                </p>
+              </div>
+              
+              <!-- Add to Cart Button -->
               <button
                 @click="addToCart(lesson)"
                 :disabled="lesson.spaces === 0"
                 :class="[
-                  'w-full py-2 px-4 rounded-lg font-semibold transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
+                  'w-full py-3.5 px-4 rounded-xl font-semibold transition-all duration-300 focus:ring-4 focus:ring-offset-2',
                   lesson.spaces > 0
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    ? 'btn-primary text-white focus:ring-midnight-500/50'
+                    : 'btn-disabled text-gray-500'
                 ]"
               >
+                <i :class="lesson.spaces > 0 ? 'fas fa-cart-plus mr-2' : 'fas fa-ban mr-2'"></i>
                 {{ lesson.spaces > 0 ? 'Add to Cart' : 'Out of Stock' }}
               </button>
             </div>
           </div>
-          <div v-else class="text-center py-12">
-            <p class="text-gray-500 text-lg">No lessons found matching your search.</p>
+
+          <!-- Empty Search Results -->
+          <div v-else class="text-center py-16 animate-fade-in">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl glass-dark mb-6">
+              <i class="fas fa-search-minus text-4xl text-midnight-300"></i>
+            </div>
+            <p class="text-midnight-200 text-lg font-medium">No lessons found matching your search.</p>
+            <p class="text-midnight-300 text-sm mt-2">Try adjusting your search terms</p>
           </div>
         </div>
 
-        <!-- Cart View -->
+        <!-- ==========================================
+             CART VIEW
+             Shows cart items, total, and checkout form
+             ========================================== -->
         <div v-else class="max-w-2xl mx-auto">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Shopping Cart</h2>
           
-          <!-- Cart Items -->
-          <div v-if="cart.length > 0" class="mb-6">
-            <!-- Cart Item -->
-            <div v-for="(item, index) in cart" :key="index" 
-                 class="bg-white rounded-lg shadow-md p-4 mb-3 flex justify-between items-center hover:shadow-lg transition-shadow">
+          <!-- Cart Title -->
+          <h2 class="font-display text-3xl font-bold text-white mb-8 flex items-center gap-3 animate-fade-in">
+            <i class="fas fa-shopping-cart text-gold-400"></i>
+            Shopping Cart
+          </h2>
+          
+          <!-- Cart Items List -->
+          <div v-if="cart.length > 0" class="mb-6 space-y-4">
+            
+            <!-- Individual Cart Item -->
+            <div v-for="(item, index) in cart" 
+                 :key="index" 
+                 class="glass-card rounded-2xl p-5 flex justify-between items-center gap-4 animate-fade-in"
+                 :style="'animation-delay: ' + (0.05 * index) + 's'">
               <div class="flex items-center gap-4">
-                <i :class="`fas ${item.icon} text-2xl text-blue-600`"></i>
+                <!-- Item Icon -->
+                <div class="icon-container w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <i :class="`fas ${item.icon} text-2xl text-midnight-600`"></i>
+                </div>
+                <!-- Item Details -->
                 <div>
-                  <h4 class="font-bold text-gray-800">{{ item.subject }}</h4>
-                  <p class="text-sm text-gray-600">
-                    <i class="fas fa-map-marker-alt mr-1"></i>{{ item.location }}
+                  <h4 class="font-display font-bold text-gray-900 text-lg">{{ item.subject }}</h4>
+                  <p class="text-sm text-gray-500 flex items-center gap-1.5 mt-1">
+                    <i class="fas fa-map-marker-alt text-xs"></i>{{ item.location }}
                   </p>
-                  <p class="text-sm text-gray-600">
-                    <i class="fas fa-pound-sign mr-1"></i>{{ item.price }}
-                  </p>
+                  <p class="text-sm font-semibold text-midnight-600 mt-0.5">£{{ item.price }}</p>
                 </div>
               </div>
+              <!-- Remove Button -->
               <button
                 @click="removeFromCart(item)"
-                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-200 font-semibold focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                class="btn-danger text-white px-4 py-2.5 rounded-xl font-semibold focus:ring-4 focus:ring-offset-2 focus:ring-red-500/50 flex items-center gap-2"
               >
-                <i class="fas fa-trash-alt mr-2"></i>Remove
+                <i class="fas fa-trash-alt"></i>
+                <span class="hidden sm:inline">Remove</span>
               </button>
             </div>
             
-            <!-- Total -->
-            <div class="bg-white rounded-lg shadow-md p-4 mt-4">
-              <div class="flex justify-between items-center text-xl font-bold">
-                <span>Total:</span>
-                <span>£{{ cartTotal }}</span>
+            <!-- Cart Total -->
+            <div class="glass-card rounded-2xl p-5 mt-6 animate-fade-in" style="animation-delay: 0.15s;">
+              <div class="flex justify-between items-center">
+                <span class="text-xl font-semibold text-gray-700">Total</span>
+                <span class="font-display text-3xl font-bold text-midnight-700">£{{ cartTotal }}</span>
               </div>
             </div>
           </div>
-          <div v-else class="text-center py-12">
-            <p class="text-gray-500 text-lg">Your cart is empty.</p>
+
+          <!-- Empty Cart Message -->
+          <div v-else class="text-center py-16 animate-fade-in">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl glass-dark mb-6">
+              <i class="fas fa-shopping-basket text-4xl text-midnight-300"></i>
+            </div>
+            <p class="text-midnight-200 text-lg font-medium">Your cart is empty</p>
+            <p class="text-midnight-300 text-sm mt-2">Browse lessons and add some to your cart</p>
           </div>
 
           <!-- Checkout Form -->
-          <div v-if="cart.length > 0" class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Checkout</h3>
+          <div v-if="cart.length > 0" class="glass-card rounded-2xl p-6 animate-fade-in" style="animation-delay: 0.2s;">
+            <h3 class="font-display text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <i class="fas fa-credit-card text-midnight-500"></i>
+              Checkout
+            </h3>
             
-            <div class="space-y-4">
+            <div class="space-y-5">
+              <!-- Name Input Field -->
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                  Name (letters only)
+                  <i class="fas fa-user text-midnight-400 mr-2"></i>
+                  Name <span class="font-normal text-gray-400">(letters only)</span>
                 </label>
                 <input
                   v-model="checkoutName"
                   type="text"
                   placeholder="Enter your name"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  :class="{ 'border-red-500': checkoutName && !isNameValid }"
+                  class="w-full px-5 py-3.5 rounded-xl input-modern font-medium"
+                  :class="{ 'input-error': checkoutName && !isNameValid }"
                 />
-                <p v-if="checkoutName && !isNameValid" class="text-red-500 text-sm mt-1">
+                <!-- Validation Error Message -->
+                <p v-if="checkoutName && !isNameValid" class="text-coral-500 text-sm mt-2 flex items-center gap-2">
+                  <i class="fas fa-exclamation-circle"></i>
                   Name must contain only letters and spaces
                 </p>
               </div>
 
+              <!-- Phone Input Field -->
               <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                  Phone (numbers only)
+                  <i class="fas fa-phone text-midnight-400 mr-2"></i>
+                  Phone <span class="font-normal text-gray-400">(numbers only)</span>
                 </label>
                 <input
                   v-model="checkoutPhone"
                   type="text"
                   placeholder="Enter your phone number"
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  :class="{ 'border-red-500': checkoutPhone && !isPhoneValid }"
+                  class="w-full px-5 py-3.5 rounded-xl input-modern font-medium"
+                  :class="{ 'input-error': checkoutPhone && !isPhoneValid }"
                 />
-                <p v-if="checkoutPhone && !isPhoneValid" class="text-red-500 text-sm mt-1">
+                <!-- Validation Error Message -->
+                <p v-if="checkoutPhone && !isPhoneValid" class="text-coral-500 text-sm mt-2 flex items-center gap-2">
+                  <i class="fas fa-exclamation-circle"></i>
                   Phone must contain only numbers
                 </p>
               </div>
 
+              <!-- Submit Order Button -->
               <button
                 @click="submitOrder"
                 :disabled="!isCheckoutValid"
                 :class="[
-                  'w-full py-3 px-4 rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
+                  'w-full py-4 px-4 rounded-xl font-bold text-lg transition-all duration-300 focus:ring-4 focus:ring-offset-2 mt-2',
                   isCheckoutValid
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    ? 'btn-primary text-white focus:ring-midnight-500/50'
+                    : 'btn-disabled text-gray-500'
                 ]"
               >
+                <i class="fas fa-paper-plane mr-2"></i>
                 Submit Order
               </button>
             </div>
 
             <!-- Success Message -->
-            <div v-if="orderSubmitted" class="mt-4 p-4 bg-green-100 border border-green-400 rounded-lg">
-              <p class="text-green-700 font-semibold">
-                <i class="fas fa-check-circle mr-2"></i>
-                Order submitted successfully!
-              </p>
+            <div v-if="orderSubmitted" 
+                 class="mt-6 p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl success-message">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-check text-white text-lg"></i>
+                </div>
+                <div>
+                  <p class="text-emerald-800 font-bold">Order submitted successfully!</p>
+                  <p class="text-emerald-600 text-sm">Redirecting you back to lessons...</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- ==========================================
+             FOOTER
+             Simple credit line
+             ========================================== -->
+        <footer class="text-center mt-16 pb-8 animate-fade-in" style="animation-delay: 0.3s;">
+          <p class="text-midnight-300 text-sm">
+            Built with <i class="fas fa-heart text-coral-400 mx-1"></i> for CST3144 Coursework
+          </p>
+        </footer>
+
       </div>
     </div>
   </div>
 
+  <!-- ==========================================
+       VUE.JS APPLICATION SCRIPT
+       All functionality preserved exactly as before
+       ========================================== -->
   <script>
     // Vue 2 App with CDN - CST3144 Coursework
     // Student: Mohammad Amaan Khan (M00986493)
@@ -309,6 +822,7 @@
           searchTimer: null,
         };
       },
+
       computed: {
         // Sorted and filtered lessons (10% marks - sort functionality)
         // This computed property automatically recalculates when lessons, sortBy, or sortOrder changes
@@ -352,6 +866,7 @@
                  this.isNameValid && this.isPhoneValid;
         }
       },
+
       methods: {
         // Fetch all lessons from API (3% marks)
         // This function runs when page loads and when search is cleared
@@ -539,6 +1054,7 @@
           return Promise.all(promises);
         }
       },
+
       mounted: function() {
         // Restore persisted state
         try {
@@ -557,6 +1073,7 @@
         // Fetch lessons when page loads
         this.fetchLessons();
       },
+
       watch: {
         cart: {
           deep: true,
@@ -567,6 +1084,7 @@
         sortOrder: function() { this.persistState(); },
         showCart: function() { this.persistState(); }
       },
+
       // Instance method to persist state
       persistState: function() {
         try {

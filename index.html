@@ -637,7 +637,7 @@
           // Backend API URL (Render deployment)
           apiBaseUrl: 'https://cst3144-backend-f7yf.onrender.com',
           
-          // Maps subject names to their image files
+          // Maps subject names to their image files (served from backend)
           subjectImages: {
             'Art': 'europeana-rMV45VgcRbQ-unsplash.jpg',
             'Music': 'igor-omilaev-0d7is4rDYIA-unsplash.jpg',
@@ -725,9 +725,10 @@
        * Methods
        */
       methods: {
-        // Returns image filename for a subject
+        // Returns full image URL from backend for a subject
         getSubjectImage: function(subject) {
-          return this.subjectImages[subject] || 'nasa-rTZW4f02zY8-unsplash.jpg';
+          var filename = this.subjectImages[subject] || 'nasa-rTZW4f02zY8-unsplash.jpg';
+          return this.apiBaseUrl + '/images/' + filename;
         },
         
         // Fetches all lessons from the API
